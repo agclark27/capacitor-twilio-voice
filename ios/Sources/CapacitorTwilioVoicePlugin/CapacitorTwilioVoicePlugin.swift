@@ -41,6 +41,7 @@ public class CapacitorTwilioVoicePlugin: CAPPlugin, CAPBridgedPlugin, PushKitEve
         CAPPluginMethod(name: "endCall", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "muteCall", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setSpeaker", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "sendDigits", returnType: CAPPluginReturnPromise),
 
         CAPPluginMethod(name: "getCallStatus", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "checkMicrophonePermission", returnType: CAPPluginReturnPromise),
@@ -561,6 +562,37 @@ public class CapacitorTwilioVoicePlugin: CAPPlugin, CAPBridgedPlugin, PushKitEve
         }
 
         toggleAudioRoute(toSpeaker: enabled)
+        call.resolve(["success": true])
+    }
+
+    @objc func sendDigits(_ call: CAPPluginCall) {
+        guard let digits = call.getString("digits") else {
+            call.reject("digits parameter is required")
+            return
+        }
+
+        // Validate digits (0-9, *, #, A-D)
+        let validDigits = CharacterSet(charactersIn: "0123456789*#ABCDabcd")
+        if digits.unicodeScalars.contains(where: { !validDigits.contains($0) }) {
+            call.reject("Invalid DTMF digits. Only 0-9, *, #, A-D are allowed")
+            return
+        }
+
+        let callSid = call.getString("callSid")
+        var targetCall: Call?
+
+        if let callSid = callSid {
+            targetCall = activeCalls[callSid]
+        } else {
+            targetCall = getActiveCall()
+        }
+
+        guard let activeCall = targetCall else {
+            call.reject("No active call found")
+            return
+        }
+
+        activeCall.sendDigits(digits)
         call.resolve(["success": true])
     }
 

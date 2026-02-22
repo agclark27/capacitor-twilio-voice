@@ -1265,6 +1265,43 @@ public class CapacitorTwilioVoicePlugin extends Plugin {
     }
 
     @PluginMethod
+    public void sendDigits(PluginCall call) {
+        String digits = call.getString("digits");
+        
+        if (digits == null || digits.isEmpty()) {
+            call.reject("digits parameter is required");
+            return;
+        }
+
+        // Validate digits (0-9, *, #, A-D)
+        if (!digits.matches("[0-9*#A-Da-d]+")) {
+            call.reject("Invalid DTMF digits. Only 0-9, *, #, A-D are allowed");
+            return;
+        }
+
+        // Send digits via the foreground service
+        Intent serviceIntent = new Intent(getSafeContext(), VoiceCallService.class);
+        serviceIntent.setAction(VoiceCallService.ACTION_SEND_DIGITS);
+        serviceIntent.putExtra(VoiceCallService.EXTRA_DIGITS, digits);
+        
+        String callSid = call.getString("callSid");
+        if (callSid != null) {
+            serviceIntent.putExtra(VoiceCallService.EXTRA_CALL_SID, callSid);
+        }
+
+        try {
+            getSafeContext().startService(serviceIntent);
+
+            JSObject ret = new JSObject();
+            ret.put("success", true);
+            call.resolve(ret);
+        } catch (Exception e) {
+            Log.e(TAG, "Error sending digits via service", e);
+            call.reject("Failed to send digits: " + e.getMessage());
+        }
+    }
+
+    @PluginMethod
     public void getCallStatus(PluginCall call) {
         JSObject ret = new JSObject();
 
