@@ -1265,6 +1265,40 @@ public class CapacitorTwilioVoicePlugin extends Plugin {
     }
 
     @PluginMethod
+    public void sendDigits(PluginCall call) {
+        String digits = call.getString("digits");
+
+        if (digits == null || digits.isEmpty()) {
+            call.reject("digits parameter is required");
+            return;
+        }
+
+        // Validate digits (0-9, *, #, A-D)
+        if (!digits.matches("[0-9*#A-Da-d]+")) {
+            call.reject("Invalid DTMF digits. Only 0-9, *, #, A-D are allowed");
+            return;
+        }
+
+        // Note: callSid parameter is accepted for API consistency with iOS,
+        // but the service currently only supports operating on the active call.
+        // This is consistent with other call control methods (muteCall, endCall).
+        Intent serviceIntent = new Intent(getSafeContext(), VoiceCallService.class);
+        serviceIntent.setAction(VoiceCallService.ACTION_SEND_DIGITS);
+        serviceIntent.putExtra(VoiceCallService.EXTRA_DIGITS, digits);
+
+        try {
+            getSafeContext().startService(serviceIntent);
+
+            JSObject ret = new JSObject();
+            ret.put("success", true);
+            call.resolve(ret);
+        } catch (Exception e) {
+            Log.e(TAG, "Error sending digits via service", e);
+            call.reject("Failed to send digits: " + e.getMessage());
+        }
+    }
+
+    @PluginMethod
     public void getCallStatus(PluginCall call) {
         JSObject ret = new JSObject();
 

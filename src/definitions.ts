@@ -267,6 +267,33 @@ export interface CapacitorTwilioVoicePlugin {
    */
   setSpeaker(options: { enabled: boolean }): Promise<{ success: boolean }>;
 
+  /**
+   * Send DTMF digits to an active call.
+   *
+   * This allows sending touch-tone (DTMF) digits during an active call, useful for
+   * navigating IVR menus or entering information during a call.
+   *
+   * @param options - Configuration object
+   * @param options.digits - String of DTMF digits to send (0-9, *, #, A-D)
+   * @param options.callSid - Unique identifier of the call (optional, defaults to current active call)
+   * @returns Promise that resolves with success status
+   *
+   * @example
+   * ```typescript
+   * // Send digits to the active call
+   * await CapacitorTwilioVoice.sendDigits({
+   *   digits: '1234'
+   * });
+   *
+   * // Send digits to a specific call
+   * await CapacitorTwilioVoice.sendDigits({
+   *   digits: '*123#',
+   *   callSid: 'CA1234567890abcdef'
+   * });
+   * ```
+   */
+  sendDigits(options: { digits: string; callSid?: string }): Promise<{ success: boolean }>;
+
   // Call Status
 
   /**

@@ -556,6 +556,7 @@ Common error scenarios:
 * [`endCall(...)`](#endcall)
 * [`muteCall(...)`](#mutecall)
 * [`setSpeaker(...)`](#setspeaker)
+* [`sendDigits(...)`](#senddigits)
 * [`getCallStatus()`](#getcallstatus)
 * [`checkMicrophonePermission()`](#checkmicrophonepermission)
 * [`requestMicrophonePermission()`](#requestmicrophonepermission)
@@ -740,6 +741,26 @@ When enabled, audio will be routed through the device's speaker instead of the e
 | Param         | Type                               | Description            |
 | ------------- | ---------------------------------- | ---------------------- |
 | **`options`** | <code>{ enabled: boolean; }</code> | - Configuration object |
+
+**Returns:** <code>Promise&lt;{ success: boolean; }&gt;</code>
+
+--------------------
+
+
+### sendDigits(...)
+
+```typescript
+sendDigits(options: { digits: string; callSid?: string; }) => Promise<{ success: boolean; }>
+```
+
+Send DTMF digits to an active call.
+
+This allows sending touch-tone (DTMF) digits during an active call, useful for
+navigating IVR menus or entering information during a call.
+
+| Param         | Type                                               | Description            |
+| ------------- | -------------------------------------------------- | ---------------------- |
+| **`options`** | <code>{ digits: string; callSid?: string; }</code> | - Configuration object |
 
 **Returns:** <code>Promise&lt;{ success: boolean; }&gt;</code>
 
