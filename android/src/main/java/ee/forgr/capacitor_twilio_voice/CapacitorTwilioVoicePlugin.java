@@ -1267,7 +1267,7 @@ public class CapacitorTwilioVoicePlugin extends Plugin {
     @PluginMethod
     public void sendDigits(PluginCall call) {
         String digits = call.getString("digits");
-        
+
         if (digits == null || digits.isEmpty()) {
             call.reject("digits parameter is required");
             return;
@@ -1283,7 +1283,7 @@ public class CapacitorTwilioVoicePlugin extends Plugin {
         Intent serviceIntent = new Intent(getSafeContext(), VoiceCallService.class);
         serviceIntent.setAction(VoiceCallService.ACTION_SEND_DIGITS);
         serviceIntent.putExtra(VoiceCallService.EXTRA_DIGITS, digits);
-        
+
         String callSid = call.getString("callSid");
         if (callSid != null) {
             serviceIntent.putExtra(VoiceCallService.EXTRA_CALL_SID, callSid);
