@@ -289,7 +289,7 @@ public class VoiceCallService extends Service {
 
         if (activeCall != null && digits != null && !digits.isEmpty()) {
             activeCall.sendDigits(digits);
-            Log.d(TAG, "Sent DTMF digits: " + digits);
+            Log.d(TAG, "Sent DTMF digits (length: " + digits.length() + ")");
         } else {
             Log.w(TAG, "Cannot send digits: no active call or empty digits");
         }

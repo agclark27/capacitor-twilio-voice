@@ -1279,15 +1279,12 @@ public class CapacitorTwilioVoicePlugin extends Plugin {
             return;
         }
 
-        // Send digits via the foreground service
+        // Note: callSid parameter is accepted for API consistency with iOS,
+        // but the service currently only supports operating on the active call.
+        // This is consistent with other call control methods (muteCall, endCall).
         Intent serviceIntent = new Intent(getSafeContext(), VoiceCallService.class);
         serviceIntent.setAction(VoiceCallService.ACTION_SEND_DIGITS);
         serviceIntent.putExtra(VoiceCallService.EXTRA_DIGITS, digits);
-
-        String callSid = call.getString("callSid");
-        if (callSid != null) {
-            serviceIntent.putExtra(VoiceCallService.EXTRA_CALL_SID, callSid);
-        }
 
         try {
             getSafeContext().startService(serviceIntent);
