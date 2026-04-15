@@ -380,6 +380,8 @@ public class CapacitorTwilioVoicePlugin: CAPPlugin, CAPBridgedPlugin, PushKitEve
             return
         }
 
+        let displayName = call.getString("displayName")
+
         checkRecordPermission { [weak self] permissionGranted in
             guard permissionGranted else {
                 call.reject("Microphone permission not granted")
@@ -391,6 +393,7 @@ public class CapacitorTwilioVoicePlugin: CAPPlugin, CAPBridgedPlugin, PushKitEve
                                          handle: to,
                                          to: to,
                                          isSystemInitiated: false,
+                                         displayName: displayName,
                                          completion: { success in
                                             if success {
                                                 call.resolve(["success": true, "callSid": uuid.uuidString])
@@ -875,7 +878,8 @@ public class CapacitorTwilioVoicePlugin: CAPPlugin, CAPBridgedPlugin, PushKitEve
                                                          isSystemInitiated: isSystemInitiated,
                                                          displayName: displayName)
 
-        let callHandle = CXHandle(type: .generic, value: handle)
+        let handleValue = (displayName?.isEmpty == false ? displayName! : handle)
+        let callHandle = CXHandle(type: .generic, value: handleValue)
         let startCallAction = CXStartCallAction(call: uuid, handle: callHandle)
         let transaction = CXTransaction(action: startCallAction)
 
@@ -907,7 +911,8 @@ public class CapacitorTwilioVoicePlugin: CAPPlugin, CAPBridgedPlugin, PushKitEve
     private func reportIncomingCall(from: String, niceName: String, uuid: UUID) {
         guard let provider = callKitProvider else { return }
 
-        let callHandle = CXHandle(type: .generic, value: from)
+        let handleValue = niceName.isEmpty ? from : niceName
+        let callHandle = CXHandle(type: .generic, value: handleValue)
         let callUpdate = CXCallUpdate()
 
         callUpdate.remoteHandle = callHandle
