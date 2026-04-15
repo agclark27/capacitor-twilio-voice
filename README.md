@@ -556,7 +556,6 @@ Common error scenarios:
 * [`endCall(...)`](#endcall)
 * [`muteCall(...)`](#mutecall)
 * [`setSpeaker(...)`](#setspeaker)
-* [`sendDigits(...)`](#senddigits)
 * [`getCallStatus()`](#getcallstatus)
 * [`checkMicrophonePermission()`](#checkmicrophonepermission)
 * [`requestMicrophonePermission()`](#requestmicrophonepermission)
@@ -634,7 +633,7 @@ Check if the user is currently logged in and has a valid access token.
 ### makeCall(...)
 
 ```typescript
-makeCall(options: { to: string; displayName?: string; callerId?: string; }) => Promise<{ success: boolean; callSid?: string; }>
+makeCall(options: { to: string; displayName?: string; }) => Promise<{ success: boolean; callSid?: string; }>
 ```
 
 Initiate an outgoing call to a phone number or client.
@@ -642,9 +641,9 @@ Initiate an outgoing call to a phone number or client.
 The user must be logged in before making a call. The call will be routed
 through your Twilio backend configuration.
 
-| Param         | Type                                                                  | Description            |
-| ------------- | --------------------------------------------------------------------- | ---------------------- |
-| **`options`** | <code>{ to: string; displayName?: string; callerId?: string; }</code> | - Configuration object |
+| Param         | Type                                               | Description            |
+| ------------- | -------------------------------------------------- | ---------------------- |
+| **`options`** | <code>{ to: string; displayName?: string; }</code> | - Configuration object |
 
 **Returns:** <code>Promise&lt;{ success: boolean; callSid?: string; }&gt;</code>
 
@@ -741,26 +740,6 @@ When enabled, audio will be routed through the device's speaker instead of the e
 | Param         | Type                               | Description            |
 | ------------- | ---------------------------------- | ---------------------- |
 | **`options`** | <code>{ enabled: boolean; }</code> | - Configuration object |
-
-**Returns:** <code>Promise&lt;{ success: boolean; }&gt;</code>
-
---------------------
-
-
-### sendDigits(...)
-
-```typescript
-sendDigits(options: { digits: string; callSid?: string; }) => Promise<{ success: boolean; }>
-```
-
-Send DTMF digits to an active call.
-
-This allows sending touch-tone (DTMF) digits during an active call, useful for
-navigating IVR menus or entering information during a call.
-
-| Param         | Type                                               | Description            |
-| ------------- | -------------------------------------------------- | ---------------------- |
-| **`options`** | <code>{ digits: string; callSid?: string; }</code> | - Configuration object |
 
 **Returns:** <code>Promise&lt;{ success: boolean; }&gt;</code>
 
