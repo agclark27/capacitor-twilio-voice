@@ -1,5 +1,5 @@
 ## Capacitor Twilio Voice Plugin
- <a href="https://capgo.app/"><img src='https://raw.githubusercontent.com/Cap-go/capgo/main/assets/capgo_banner.png' alt='Capgo - Instant updates for capacitor'/></a>
+<a href="https://capgo.app/"><img src="https://capgo.app/readme-banner.svg?repo=Cap-go/capacitor-twilio-voice" alt="Capgo - Instant updates for Capacitor" /></a>
 
 <div align="center">
   <h2><a href="https://capgo.app/?ref=plugin_twilio_voice"> ➡️ Get Instant updates for your App with Capgo</a></h2>
@@ -24,6 +24,20 @@ The most complete doc is available here: https://capgo.app/docs/plugins/twilio-v
 > **Note:** The major version of this plugin follows the major version of Capacitor. Use the version that matches your Capacitor installation (e.g., plugin v8 for Capacitor 8). Only the latest major version is actively maintained.
 
 ## Installation
+
+You can use our AI-Assisted Setup to install the plugin. Add the Capgo skills to your AI tool using the following command:
+
+```bash
+npx skills add https://github.com/cap-go/capacitor-skills --skill capacitor-plugins
+```
+
+Then use the following prompt:
+
+```text
+Use the `capacitor-plugins` skill from `cap-go/capacitor-skills` to install the `@capgo/capacitor-twilio-voice` plugin in my project.
+```
+
+If you prefer Manual Setup, install the plugin by running the following commands and follow the platform-specific instructions below:
 
 ```bash
 npm install @capgo/capacitor-twilio-voice
@@ -634,7 +648,7 @@ Check if the user is currently logged in and has a valid access token.
 ### makeCall(...)
 
 ```typescript
-makeCall(options: { to: string; }) => Promise<{ success: boolean; callSid?: string; }>
+makeCall(options: { to: string; displayName?: string; callerId?: string; }) => Promise<{ success: boolean; callSid?: string; }>
 ```
 
 Initiate an outgoing call to a phone number or client.
@@ -642,9 +656,9 @@ Initiate an outgoing call to a phone number or client.
 The user must be logged in before making a call. The call will be routed
 through your Twilio backend configuration.
 
-| Param         | Type                         | Description            |
-| ------------- | ---------------------------- | ---------------------- |
-| **`options`** | <code>{ to: string; }</code> | - Configuration object |
+| Param         | Type                                                                  | Description            |
+| ------------- | --------------------------------------------------------------------- | ---------------------- |
+| **`options`** | <code>{ to: string; displayName?: string; callerId?: string; }</code> | - Configuration object |
 
 **Returns:** <code>Promise&lt;{ success: boolean; callSid?: string; }&gt;</code>
 
